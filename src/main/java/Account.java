@@ -4,7 +4,7 @@ public abstract class Account {
 	private String id;
 	private double apr;
 
-	public Account(String id, double apr) {
+	protected Account(String id, double apr) {
 		this.id = id;
 		this.apr = apr;
 	}
