@@ -23,7 +23,22 @@ public class AccountValidator {
 			return false;
 		}
 
-		// validate account number is 8 digit
-		return accountNumber.length() == 8 && accountNumber.matches("\\d+");
+		// Validate account number is 8 digits
+		if (accountNumber.length() != 8 || !accountNumber.matches("\\d+")) {
+			return false;
+		}
+
+		// Validate APR is a positive double
+		try {
+			double aprValue = Double.parseDouble(apr);
+			if (aprValue <= 0) {
+				return false;
+			}
+		} catch (NumberFormatException e) {
+			return false;
+		}
+
+		// If all validations pass
+		return true;
 	}
 }
