@@ -1,44 +1,51 @@
 public class AccountValidator {
 	public boolean validate(String command) {
-		// splitting the command into parts
+		// Splitting the command into parts
 		String[] parts = command.split(" ");
 
-		// Checking if command structure matches "create checking <accountNumber>
-		if (parts.length != 4) {
+		// Common validations for all account types
+		if (parts.length < 4) {
 			return false;
 		}
 
 		String operation = parts[0];
-		String accountType = parts[1];
+		String accountType = parts[1].toLowerCase();
 		String accountNumber = parts[2];
-		String apr = parts[3];
 
-		// validate operation is 'create'
-		if (!operation.equals("create")) {
+		if (!operation.equals("create") || accountNumber.length() != 8 || !accountNumber.matches("\\d+")) {
 			return false;
 		}
 
-		// validate account type is 'checking'
-		if (!accountType.equals("checking")) {
-			return false;
-		}
-
-		// Validate account number is 8 digits
-		if (accountNumber.length() != 8 || !accountNumber.matches("\\d+")) {
-			return false;
-		}
-
-		// Validate APR is a positive double
-		try {
-			double aprValue = Double.parseDouble(apr);
-			if (aprValue <= 0) {
+		switch (accountType) {
+		case "checking":
+		case "savings":
+			return validateAPR(parts[3]);
+		case "cd":
+			if (parts.length != 5) {
 				return false;
 			}
+			return validateCDCommand(parts[3], parts[4]);
+		default:
+			return false;
+		}
+	}
+
+	private boolean validateAPR(String apr) {
+		try {
+			double aprValue = Double.parseDouble(apr);
+			return aprValue > 0;
 		} catch (NumberFormatException e) {
 			return false;
 		}
+	}
 
-		// If all validations pass
-		return true;
+	private boolean validateCDCommand(String deposit, String apr) {
+		try {
+			double depositAmount = Double.parseDouble(deposit);
+			double aprValue = Double.parseDouble(apr);
+			return depositAmount >= 1000 && aprValue > 0;
+		} catch (NumberFormatException e) {
+			return false;
+		}
 	}
 }
