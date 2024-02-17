@@ -67,4 +67,22 @@ public class AccountValidatorTest {
 		assertFalse(validator.validate(command));
 	}
 
+	@Test
+	public void valid_deposit_checking_account_test() {
+		String command = "deposit checking 12345678 100";
+		assertTrue(validator.validate(command));
+	}
+
+	@Test
+	public void invalid_deposit_command_negative_amount_test() {
+		String command = "deposit checking 12345678 -100";
+		assertFalse(validator.validate(command));
+	}
+
+	@Test
+	public void invalid_deposit_command_incorrect_account_type_test() {
+		String command = "deposit gold 12345678 100"; // Assuming 'gold' is not a valid account type
+		assertFalse(validator.validate(command));
+	}
+
 }
