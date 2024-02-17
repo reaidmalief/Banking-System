@@ -18,4 +18,11 @@ public class AccountValidatorTest {
 		assertFalse(validator.validate(command));
 	}
 
+	@Test
+	public void invalid_checking_account_creation_command_incorrect_account_number_length() {
+		String command = "create checking 1234567 0.5";
+		AccountValidator validator = new AccountValidator();
+		assertFalse(validator.validate(command));
+	}
+
 }
