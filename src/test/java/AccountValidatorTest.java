@@ -6,11 +6,11 @@ import org.junit.jupiter.api.Test;
 
 public class AccountValidatorTest {
 
-	private AccountValidator validator;
+	private ValidationStrategy validator;
 
 	@BeforeEach
 	public void setUp() {
-		validator = new AccountValidator();
+		validator = new ValidationStrategy();
 	}
 
 	@Test
@@ -39,7 +39,7 @@ public class AccountValidatorTest {
 
 	@Test
 	public void invalid_checking_account_creation_command_zero_apr_test() {
-		String command = "create checking 12345678 0"; // APR is zero
+		String command = "create checking 12345678 0";
 		assertFalse(validator.validate(command));
 	}
 
@@ -81,7 +81,7 @@ public class AccountValidatorTest {
 
 	@Test
 	public void invalid_deposit_command_incorrect_account_type_test() {
-		String command = "deposit gold 12345678 100"; // Assuming 'gold' is not a valid account type
+		String command = "deposit gold 12345678 100"; // 'gold' is not a valid account type
 		assertFalse(validator.validate(command));
 	}
 
