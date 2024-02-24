@@ -1,5 +1,5 @@
 public class CommandProcessor {
-	private Bank bank;
+	private final Bank bank;
 
 	public CommandProcessor(Bank bank) {
 		this.bank = bank;
@@ -27,7 +27,7 @@ public class CommandProcessor {
 		String accountType = parts[1];
 		String accountId = parts[2];
 		double apr = Double.parseDouble(parts[3]);
-		if ("cd".equals(accountType.toLowerCase()) && parts.length == 5) {
+		if ("cd".equalsIgnoreCase(accountType) && parts.length == 5) {
 			double initialBalance = Double.parseDouble(parts[4]);
 			bank.addAccount(accountType, accountId, apr, initialBalance);
 		} else {
