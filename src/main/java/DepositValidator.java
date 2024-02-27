@@ -1,74 +1,50 @@
-class DepositValidator {
+public class DepositValidator {
 
-	private final Bank bankingSystem;
+    private final Bank bankingSystem;
 
-	DepositValidator(Bank bankingSystem) {
-		this.bankingSystem = bankingSystem;
-	}
+    DepositValidator(Bank bankingSystem) {
+        this.bankingSystem = bankingSystem;
+    }
 
-	static boolean checkAccountExists(String[] args, Bank bankingSystem) {
-		try {
-			return bankingSystem.getAccounts().containsKey(args[1]);
-		} catch (ArrayIndexOutOfBoundsException e) {
-			return false;
-		}
-	}
+    // Use instance methods instead of static methods when accessing bankingSystem
+    private boolean checkAccountExists(String accountId) {
+        try {
+            return bankingSystem.getAccounts().containsKey(accountId);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return false;
+        }
+    }
 
-	static boolean isCheckingAccountReference(String[] args, Bank bankingSystem) {
-		try {
-			Account acc = bankingSystem.getAccounts().get(args[1]);
-			return acc instanceof CheckingAccount;
-		} catch (ArrayIndexOutOfBoundsException e) {
-			return false;
-		}
-	}
+    private boolean isAccountTypeReference(String accountId, Class<? extends Account> accountType) {
+        Account acc = bankingSystem.getAccounts().get(accountId);
+        return accountType.isInstance(acc);
+    }
 
-	static boolean isSavingsAccountReference(String[] args, Bank bankingSystem) {
-		try {
-			Account acc = bankingSystem.getAccounts().get(args[1]);
-			return acc instanceof SavingsAccount;
-		} catch (ArrayIndexOutOfBoundsException e) {
-			return false;
-		}
-	}
+    private static double parseToDouble(String value) {
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
 
-	static boolean isCDAccountReference(String[] args, Bank bankingSystem) {
-		try {
-			Account acc = bankingSystem.getAccounts().get(args[1]);
-			return acc instanceof CDAccount;
-		} catch (ArrayIndexOutOfBoundsException e) {
-			return false;
-		}
-	}
+    public boolean validate(String[] args) {
+        if (args.length < 3) return false; // Ensure there are enough arguments
 
-	static double parseToDouble(String value) {
-		try {
-			return Double.parseDouble(value);
-		} catch (NumberFormatException e) {
-			return -1;
-		}
-	}
+        String accountId = args[1];
+        if (!checkAccountExists(accountId)) return false;
 
-	boolean validate(String[] args) {
-		if (checkAccountExists(args, bankingSystem)) {
-			if (isCheckingAccountReference(args, bankingSystem)) {
-				return checkCheckingAccountDepositValidity(args);
-			} else if (isSavingsAccountReference(args, bankingSystem)) {
-				return checkSavingsAccountDepositValidity(args);
-			} else if (isCDAccountReference(args, bankingSystem)) {
-				return false; // CD Account deposits have specific restrictions.
-			}
-		}
-		return false;
-	}
+        // Refactored validation checks using streamlined account type checks
+        double depositAmount = parseToDouble(args[2]);
+        if (isAccountTypeReference(accountId, CheckingAccount.class)) {
+            return depositAmount >= 0 && depositAmount <= 1000;
+        } else if (isAccountTypeReference(accountId, SavingsAccount.class)) {
+            return depositAmount >= 0 && depositAmount <= 2500;
+        } else if (isAccountTypeReference(accountId, CDAccount.class)) {
+            // CD Account deposits have specific restrictions.
+            return false;
+        }
 
-	private boolean checkCheckingAccountDepositValidity(String[] args) {
-		double depositAmount = parseToDouble(args[2]);
-		return (depositAmount >= 0 && depositAmount <= 1000);
-	}
-
-	private boolean checkSavingsAccountDepositValidity(String[] args) {
-		double depositAmount = parseToDouble(args[2]);
-		return (depositAmount >= 0 && depositAmount <= 2500);
-	}
+        return false;
+    }
 }
