@@ -1,15 +1,24 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Bank {
 
 	private final HashMap<String, Account> accounts;
+	private final ArrayList<String> accountOrder = new ArrayList<>();
 
 	public Bank() {
 		accounts = new HashMap<>();
 	}
 
+	HashMap<String, Account> getAccounts() {
+		return accounts;
+	}
+
 	public void addAccount(Account account) {
-		accounts.put(account.getId(), account);
+		if (!accounts.containsKey(account.getId())) {
+			accounts.put(account.getId(), account);
+		}
+		accountOrder.add(account.getId());
 	}
 
 	public int getNumOfAccounts() {
@@ -31,4 +40,11 @@ public class Bank {
 			accounts.get(id).withdraw(amount);
 		}
 	}
+
+	public void openCheckingAccount(String id, double amount) {
+		CheckingAccount account = new CheckingAccount(id, amount);
+		accounts.put(id, account);
+		accountOrder.add(id);
+	}
+
 }
