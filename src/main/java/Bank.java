@@ -21,12 +21,12 @@ public class Bank {
 		accountOrder.add(account.getId());
 	}
 
-	public int getNumOfAccounts() {
-		return accounts.size();
-	}
-
 	public Account getAccount(String id) {
 		return accounts.get(id);
+	}
+
+	public int getNumOfAccounts() {
+		return accounts.size();
 	}
 
 	public void deposit(String id, double amount) {
