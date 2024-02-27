@@ -1,8 +1,8 @@
 public abstract class Account {
 
+	private final String id;
+	private final double apr;
 	protected double balance;
-	private String id;
-	private double apr;
 
 	protected Account(String id, double apr) {
 		this.id = id;
@@ -34,4 +34,5 @@ public abstract class Account {
 			balance -= amount;
 		}
 	}
+
 }

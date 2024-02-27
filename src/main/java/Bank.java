@@ -1,26 +1,31 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Bank {
 
+	public final ArrayList<String> accountOrder = new ArrayList<>();
 	private final HashMap<String, Account> accounts;
 
 	public Bank() {
-
 		accounts = new HashMap<>();
 	}
 
-	public void addAccount(Account account) {
+	HashMap<String, Account> getAccounts() {
+		return accounts;
+	}
 
-		accounts.put(account.getId(), account);
+	public void addAccount(Account account) {
+		if (!accounts.containsKey(account.getId())) {
+			accounts.put(account.getId(), account);
+		}
+		accountOrder.add(account.getId());
 	}
 
 	public int getNumOfAccounts() {
-
 		return accounts.size();
 	}
 
 	public Account getAccount(String id) {
-
 		return accounts.get(id);
 	}
 
@@ -36,16 +41,16 @@ public class Bank {
 		}
 	}
 
-	public void addAccount(String accountType, String accountId, double apr, double initialBalance) {
-		Account account;
-		switch (accountType.toLowerCase()) {
-		case "cd":
-			account = new CDAccount(accountId, apr, initialBalance);
-			break;
-		default:
-			throw new IllegalArgumentException("Unsupported account type for this method: " + accountType);
-		}
-		this.accounts.put(accountId, account);
+	public void openCheckingAccount(String id, double amount) {
+		CheckingAccount account = new CheckingAccount(id, amount);
+		accounts.put(id, account);
+		accountOrder.add(id);
+	}
+
+	void openSavingsAccount(String id) {
+		SavingsAccount account = new SavingsAccount(id, 0.01);
+		accounts.put(id, account);
+		accountOrder.add(id);
 	}
 
 }
