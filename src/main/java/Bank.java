@@ -5,7 +5,6 @@ public class Bank {
 
 	public final ArrayList<String> accountOrder = new ArrayList<>();
 	private final HashMap<String, Account> accounts;
-	private final ArrayList<String> accountOrder = new ArrayList<>();
 
 	public Bank() {
 		accounts = new HashMap<>();
