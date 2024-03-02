@@ -1,3 +1,5 @@
+package banking;
+
 class CommandProcessor {
 
 	private final Bank bank;

@@ -1,3 +1,5 @@
+package banking;
+
 class DepositCommandProcessor {
 
 	private final Bank bank;
