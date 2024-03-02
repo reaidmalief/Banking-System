@@ -27,7 +27,7 @@ public class CommandStorage {
 
 	public void storeValidCommand(String command) {
 		InputParser input = new InputParser();
-		String[] commandArguments = input.parseCommand(command);
+		String[] commandArguments = input.parsedCommand(command);
 
 		if (commandArguments[0].equalsIgnoreCase("create") || commandArguments[0].equalsIgnoreCase("withdraw")
 				|| commandArguments[0].equalsIgnoreCase("deposit")) {

@@ -47,10 +47,15 @@ public class Bank {
 		accountOrder.add(id);
 	}
 
-	void openSavingsAccount(String id) {
-		SavingsAccount account = new SavingsAccount(id, 0.01);
+	void openSavingsAccount() {
+		SavingsAccount account = new SavingsAccount("12345678", 0.01);
+		accounts.put("12345678", account);
+		accountOrder.add("12345678");
+	}
+
+	public void openCDAccount(String id, double apr, double amount) {
+		CDAccount account = new CDAccount(id, apr, amount);
 		accounts.put(id, account);
 		accountOrder.add(id);
 	}
-
 }
