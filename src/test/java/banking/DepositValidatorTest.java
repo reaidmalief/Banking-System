@@ -7,12 +7,11 @@ import org.junit.jupiter.api.Test;
 
 public class DepositValidatorTest {
 	private CommandValidator commandValidator;
-	private Bank bank;
 	private InputParser inputParser;
 
 	@BeforeEach
 	void setUp() {
-		bank = new Bank();
+		Bank bank = new Bank();
 		commandValidator = new CommandValidator(bank);
 		inputParser = new InputParser();
 	}
@@ -22,4 +21,11 @@ public class DepositValidatorTest {
 		String[] commandArgs = inputParser.parseCommand("");
 		assertFalse(commandValidator.validate(commandArgs));
 	}
+
+	@Test
+	void missing_account_ID_and_deposit_amount() {
+		String[] commandArgs = inputParser.parseCommand("deposit");
+		assertFalse(commandValidator.validate(commandArgs));
+	}
+
 }
