@@ -34,4 +34,10 @@ public class DepositValidatorTest {
 		assertFalse(commandValidator.validate(commandArgs));
 	}
 
+	@Test
+	void account_ID_does_not_exists() {
+		String[] commandArgs = inputParser.parseCommand("deposit 98765432 100");
+		assertFalse(commandValidator.validate(commandArgs));
+	}
+
 }
