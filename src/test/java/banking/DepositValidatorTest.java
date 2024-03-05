@@ -28,4 +28,10 @@ public class DepositValidatorTest {
 		assertFalse(commandValidator.validate(commandArgs));
 	}
 
+	@Test
+	void missing_deposit_amount() {
+		String[] commandArgs = inputParser.parseCommand("deposit 12345678");
+		assertFalse(commandValidator.validate(commandArgs));
+	}
+
 }
