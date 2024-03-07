@@ -55,4 +55,9 @@ public class Bank {
 		accountOrder.add(id);
 	}
 
+	public void openCDAccount(String id, double apr, double amount) {
+		CDAccount account = new CDAccount(id, apr, amount);
+		accounts.put(id, account);
+		accountOrder.add(id);
+	}
 }

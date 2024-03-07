@@ -64,4 +64,12 @@ public class DepositValidatorTest {
 		assertFalse(commandValidator.validate(commandArgs));
 	}
 
+	@Test
+	void invalid_deposit_in_CD_accounts() {
+		bank.openCDAccount("12345678", 0.1, 1000);
+		String[] commandArgs = inputParser.parseCommand("deposit 12345678 100");
+		assertFalse(commandValidator.validate(commandArgs));
+
+	}
+
 }
