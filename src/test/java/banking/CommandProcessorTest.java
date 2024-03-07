@@ -45,7 +45,7 @@ public class CommandProcessorTest {
 
 	@Test
 	void deposit_into_empty_savings_account() {
-		bank.openSavingsAccount("12345677");
+		bank.openSavingsAccount("12345677", 0.1);
 		String[] commandArgs = inputParser.parseCommand("deposit 12345677 1000");
 		processor.execute(commandArgs);
 		assertEquals(1000, bank.getAccounts().get("12345677").getBalance(), 0.001);
@@ -53,7 +53,7 @@ public class CommandProcessorTest {
 
 	@Test
 	void deposit_into_savings_with_balance_greater_than_zero() {
-		bank.openSavingsAccount("12345678");
+		bank.openSavingsAccount("12345678", 0.1);
 		bank.deposit("12345678", 1000);
 		double initialBalance = bank.getAccounts().get("12345678").getBalance();
 		String[] commandArgs = inputParser.parseCommand("deposit 12345678 1000");

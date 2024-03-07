@@ -49,7 +49,7 @@ public class Bank {
 		accountOrder.add(id);
 	}
 
-	void openSavingsAccount(String id) {
+	void openSavingsAccount(String id, double apr) {
 		SavingsAccount account = new SavingsAccount(id, 0.01);
 		accounts.put(id, account);
 		accountOrder.add(id);

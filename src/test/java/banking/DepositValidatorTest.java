@@ -1,6 +1,7 @@
 package banking;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,6 +71,13 @@ public class DepositValidatorTest {
 		String[] commandArgs = inputParser.parseCommand("deposit 12345678 100");
 		assertFalse(commandValidator.validate(commandArgs));
 
+	}
+
+	@Test
+	void depositing_amount_zero_into_savings() {
+		bank.openSavingsAccount("12345678", 500);
+		String[] commandArgs = inputParser.parseCommand("deposit 12345678 0");
+		assertTrue(commandValidator.validate(commandArgs));
 	}
 
 }
