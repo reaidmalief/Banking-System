@@ -57,4 +57,11 @@ public class DepositValidatorTest {
 
 	}
 
+	@Test
+	void invalid_account_ID_not_numbers() {
+		bank.openCheckingAccount("12345678", 0.1);
+		String[] commandArgs = inputParser.parseCommand("deposit 123abcd8 2000");
+		assertFalse(commandValidator.validate(commandArgs));
+	}
+
 }
