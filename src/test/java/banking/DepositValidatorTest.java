@@ -49,4 +49,12 @@ public class DepositValidatorTest {
 
 	}
 
+	@Test
+	void invalid_account_ID_greater_than_eight_digits() {
+		bank.openCheckingAccount("12345678", 0.1);
+		String[] commandArgs = inputParser.parseCommand("deposit 123456789 100");
+		assertFalse(commandValidator.validate(commandArgs));
+
+	}
+
 }
