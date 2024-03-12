@@ -94,4 +94,10 @@ public class DepositValidatorTest {
 		assertFalse(commandValidator.validate(commandArgs));
 	}
 
+	@Test
+	void depositing_amount_thousand_into_savings() {
+		bank.openSavingsAccount("12345678", 0.23);
+		String[] commandArgs = inputParser.parseCommand("deposit 12345678 1000");
+		assertTrue(commandValidator.validate(commandArgs));
+	}
 }
