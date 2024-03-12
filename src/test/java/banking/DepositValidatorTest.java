@@ -107,4 +107,11 @@ public class DepositValidatorTest {
 		String[] commandArgs = inputParser.parseCommand("deposit 12345678 2500");
 		assertTrue(commandValidator.validate(commandArgs));
 	}
+
+	@Test
+	void invalid_deposit_exceeds_maximum_amount_in_savings() {
+		bank.openSavingsAccount("12345678", 0.1);
+		String[] commandArgs = inputParser.parseCommand("deposit 12345678 2501");
+		assertFalse(commandValidator.validate(commandArgs));
+	}
 }
