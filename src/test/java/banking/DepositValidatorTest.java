@@ -114,4 +114,13 @@ public class DepositValidatorTest {
 		String[] commandArgs = inputParser.parseCommand("deposit 12345678 2501");
 		assertFalse(commandValidator.validate(commandArgs));
 	}
+
+	@Test
+	void deposit_zero_dollars_into_checking_account_is_valid() {
+		bank.openCheckingAccount("12345678", 0.1);
+		String[] commandArgs = inputParser.parseCommand("deposit 12345678 0");
+		assertTrue(commandValidator.validate(commandArgs));
+
+	}
+
 }
