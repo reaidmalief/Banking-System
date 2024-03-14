@@ -136,4 +136,11 @@ public class DepositValidatorTest {
 		assertFalse(commandValidator.validate(commandArgs));
 	}
 
+	@Test
+	void depositing_maximum_amount_into_checking_account() {
+		bank.openCheckingAccount("12345678", 0.1);
+		String[] commandArgs = inputParser.parseCommand("deposit 12345678 1000");
+		assertTrue(commandValidator.validate(commandArgs));
+	}
+
 }
