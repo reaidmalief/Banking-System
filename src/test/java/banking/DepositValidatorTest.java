@@ -158,4 +158,12 @@ public class DepositValidatorTest {
 
 	}
 
+	@Test
+	void deposit_amount_contains_letter_is_invalid() {
+		bank.openSavingsAccount("12345678", 0.23);
+		String[] commandArgs = inputParser.parseCommand("deposit 12345678 k");
+		assertFalse(commandValidator.validate(commandArgs));
+
+	}
+
 }
