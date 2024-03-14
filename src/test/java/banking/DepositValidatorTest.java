@@ -143,4 +143,11 @@ public class DepositValidatorTest {
 		assertTrue(commandValidator.validate(commandArgs));
 	}
 
+	@Test
+	void deposit_amount_exceeds_maximum_amount_into_checking_account() {
+		bank.openCheckingAccount("12345678", 0.93);
+		String[] commandArgs = inputParser.parseCommand("deposit 12345678 1001");
+		assertFalse(commandValidator.validate(commandArgs));
+	}
+
 }
