@@ -161,7 +161,14 @@ public class DepositValidatorTest {
 	@Test
 	void deposit_amount_contains_letter_is_invalid() {
 		bank.openSavingsAccount("12345678", 0.23);
-		String[] commandArgs = inputParser.parseCommand("deposit 12345678 k");
+		String[] commandArgs = inputParser.parseCommand("deposit 12345678 ksa");
+		assertFalse(commandValidator.validate(commandArgs));
+	}
+
+	@Test
+	void deposit_amount_is_not_a_double_is_invalid() {
+		bank.openSavingsAccount("12345678", 0.23);
+		String[] commandArgs = inputParser.parseCommand("deposit 12345678 r");
 		assertFalse(commandValidator.validate(commandArgs));
 
 	}
