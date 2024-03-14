@@ -123,10 +123,17 @@ public class DepositValidatorTest {
 	}
 
 	@Test
-	void depositing_amount_one_in_checking_account() {
+	void depositing_amount_one_in_checking_account_is_valid() {
 		bank.openCheckingAccount("12345678", 0.93);
 		String[] commandArgs = inputParser.parseCommand("deposit 12345678 1");
 		assertTrue(commandValidator.validate(commandArgs));
+	}
+
+	@Test
+	void depositing_negative_amount_in_checking_account_is_valid() {
+		bank.openCheckingAccount("12345678", 0.23);
+		String[] commandArgs = inputParser.parseCommand("deposit 12345678 -1");
+		assertFalse(commandValidator.validate(commandArgs));
 	}
 
 }
