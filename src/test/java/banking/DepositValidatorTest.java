@@ -150,4 +150,12 @@ public class DepositValidatorTest {
 		assertFalse(commandValidator.validate(commandArgs));
 	}
 
+	@Test
+	void deposit_amount_has_special_symbol_is_invalid() {
+		bank.openSavingsAccount("12345678", 0.1);
+		String[] commandArgs = inputParser.parseCommand("deposit 12345678 1,000");
+		assertFalse(commandValidator.validate(commandArgs));
+
+	}
+
 }
