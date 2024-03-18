@@ -1,7 +1,6 @@
 package banking;
 
 public abstract class Account {
-
 	String id;
 	double apr;
 	double balance;
@@ -36,25 +35,23 @@ public abstract class Account {
 		return accountType;
 	}
 
-	public void deposit(double balance) {
-		this.balance += balance;
+	public void deposit(double amount) {
+		this.balance += amount;
 	}
 
-	public void withdraw(double balance) {
-		this.balance -= balance;
+	public void withdraw(double amount) {
+		this.balance -= amount;
 	}
 
 	public void passTimeAndCalculateAPR(int months) {
 		age += months;
+		calculateInterest(months);
+	}
 
-		if (accountType.equalsIgnoreCase("cd")) {
-			for (int monthLoopIndex = 0; monthLoopIndex < months; monthLoopIndex++) {
-				for (int multipleCalculationCounter = 0; multipleCalculationCounter < 4; multipleCalculationCounter++) {
-					balance += ((apr / 100) / 12) * balance;
-				}
-			}
-		} else {
-			for (int monthLoopIndex = 0; monthLoopIndex < months; monthLoopIndex++) {
+	protected void calculateInterest(int months) {
+		int calculationsPerMonth = accountType.equalsIgnoreCase("cd") ? 4 : 1;
+		for (int month = 0; month < months; month++) {
+			for (int calculation = 0; calculation < calculationsPerMonth; calculation++) {
 				balance += ((apr / 100) / 12) * balance;
 			}
 		}

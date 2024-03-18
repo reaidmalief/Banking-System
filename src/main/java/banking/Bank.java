@@ -38,15 +38,18 @@ public class Bank {
 		}
 	}
 
-	public double doWithdraw(String id, double balance) {
+	public double doWithdraw(String id, double amount) {
 		Account account = accounts.get(id);
-		if (account.getBalance() < balance) {
+		if (account == null) {
+			return -1;
+		}
+		if (account.getBalance() < amount) {
 			double previousBalance = account.getBalance();
 			account.setBalance();
 			return previousBalance;
 		} else {
-			account.withdraw(balance);
-			return balance;
+			account.withdraw(amount);
+			return amount;
 		}
 	}
 
