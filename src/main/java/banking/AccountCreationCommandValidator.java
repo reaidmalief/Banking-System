@@ -64,7 +64,8 @@ public class AccountCreationCommandValidator {
 	}
 
 	private boolean isCreatingCheckingAccount(String[] commandArguments) {
-		return commandArguments[1].equalsIgnoreCase("checking");
+		return commandArguments[0].equalsIgnoreCase("create") && commandArguments[1].equalsIgnoreCase("checking")
+				&& commandArguments.length >= 4;
 	}
 
 	private boolean isCreatingSavingsAccount(String[] commandArguments) {
@@ -76,7 +77,7 @@ public class AccountCreationCommandValidator {
 	}
 
 	private boolean startsWithBalanceOfZero(String[] commandArguments) {
-		return commandArguments.length != 5; // This logic seems off for determining balance of zero. Review needed.
+		return commandArguments.length != 5;
 	}
 
 	private boolean isWithinCDStartingBalanceLimits(String startingBalanceAsString) {

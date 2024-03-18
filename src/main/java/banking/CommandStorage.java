@@ -1,5 +1,7 @@
 package banking;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,9 +30,9 @@ public class CommandStorage {
 	}
 
 	public void storeValidCommand(String command) {
-		InputParser input = new InputParser();
-		String[] commandArguments = input.parseCommand(command);
+		String[] commandArguments = InputParser.parseCommand(command);
 
+		// Logic for handling the parsed commandArguments...
 		if (commandArguments[0].equalsIgnoreCase("create") || commandArguments[0].equalsIgnoreCase("withdraw")
 				|| commandArguments[0].equalsIgnoreCase("deposit")) {
 			insertIntoMap(validCommands, commandArguments[1], command);
@@ -47,5 +49,26 @@ public class CommandStorage {
 			map.put(accountID, new ArrayList<>());
 			map.get(accountID).add(command);
 		}
+	}
+
+	private String createAccountStatusString(String accountID) {
+		DecimalFormat decimalFormat = new DecimalFormat("0.00");
+		decimalFormat.setRoundingMode(RoundingMode.FLOOR);
+		Account account = bank.getAccounts().get(accountID);
+		String formattedBalance = decimalFormat.format(account.getBalance());
+		String formattedAPR = decimalFormat.format(account.getApr());
+		return account.getAccountType() + " " + account.getId() + " " + formattedBalance + " " + formattedAPR;
+	}
+
+	public List<String> getOutput() {
+		List<String> output = new ArrayList<>();
+		for (String accountID : bank.getAccountOrder()) {
+			output.add(createAccountStatusString(accountID));
+			if (validCommands.get(accountID) != null) {
+				output.addAll(validCommands.get(accountID));
+			}
+		}
+		output.addAll(invalidCommands);
+		return output;
 	}
 }

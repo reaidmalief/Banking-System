@@ -2,9 +2,25 @@ package banking;
 
 public class SavingsAccount extends Account {
 
-	public SavingsAccount(String id, double apr) {
-		super(id, apr);
-		this.balance = 0;
+	private boolean hasWithdrawnThisMonth = false;
 
+	public SavingsAccount(String id, double apr) {
+		super.id = id;
+		super.apr = apr;
+		this.balance = 0;
+		super.accountType = "Savings";
 	}
+
+	@Override
+	void setMonths(int months) {
+		if (months > super.age) {
+			hasWithdrawnThisMonth = false;
+		}
+		super.age = months;
+	}
+
+	boolean getHasWithdrawnThisMonth() {
+		return hasWithdrawnThisMonth;
+	}
+
 }

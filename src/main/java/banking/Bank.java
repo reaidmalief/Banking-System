@@ -2,14 +2,14 @@ package banking;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Bank {
 
 	public final ArrayList<String> accountOrder = new ArrayList<>();
-	private final HashMap<String, Account> accounts;
+	private final HashMap<String, Account> accounts = new HashMap<>();
 
 	public Bank() {
-		accounts = new HashMap<>();
 	}
 
 	HashMap<String, Account> getAccounts() {
@@ -23,41 +23,62 @@ public class Bank {
 		accountOrder.add(account.getId());
 	}
 
-	public Account getAccount(String id) {
-		return accounts.get(id);
-	}
-
-	public int getNumOfAccounts() {
-		return accounts.size();
-	}
-
-	public void deposit(String id, double amount) {
-		if (accounts.containsKey(id) && amount > 0) {
-			accounts.get(id).deposit(amount);
+	public void doDeposit(String id, double balance) {
+		if (accounts.containsKey(id) && balance > 0) {
+			accounts.get(id).deposit(balance);
 		}
 	}
 
-	public void withdraw(String id, double amount) {
-		if (accounts.containsKey(id) && amount > 0) {
-			accounts.get(id).withdraw(amount);
+	public double doWithdraw(String id, double balance) {
+		Account account = accounts.get(id);
+		if (account.getBalance() < balance) {
+			double previousBalance = account.getBalance();
+			account.setBalance();
+			return previousBalance;
+		} else {
+			account.withdraw(balance);
+			return balance;
 		}
 	}
 
-	public void openCheckingAccount(String id, double amount) {
-		CheckingAccount account = new CheckingAccount(id, amount);
-		accounts.put(id, account);
-		accountOrder.add(id);
+	public void transferBetweenAccounts(String fromAccount, String toAccount, double amount) {
+		accounts.get(toAccount).deposit(doWithdraw(fromAccount, amount));
+	}
+
+	public void openCheckingAccount(String id, double apr) {
+		CheckingAccount account = new CheckingAccount(id, apr);
+		addAccount(account);
 	}
 
 	void openSavingsAccount(String id, double apr) {
-		SavingsAccount account = new SavingsAccount(id, 0.01);
-		accounts.put(id, account);
-		accountOrder.add(id);
+		SavingsAccount account = new SavingsAccount(id, apr);
+		addAccount(account);
 	}
 
 	public void openCDAccount(String id, double apr, double amount) {
 		CDAccount account = new CDAccount(id, apr, amount);
-		accounts.put(id, account);
-		accountOrder.add(id);
+		addAccount(account);
+	}
+
+	public void passTime(int months) {
+		List<String> accountsToRemove = new ArrayList<>();
+
+		for (String accountID : accounts.keySet()) {
+			Account account = accounts.get(accountID);
+			if (account.getBalance() == 0) {
+				accountsToRemove.add(accountID);
+				continue;
+			}
+			account.passTimeAndCalculateAPR(months);
+		}
+
+		for (String accountID : accountsToRemove) {
+			accounts.remove(accountID);
+			accountOrder.remove(accountID);
+		}
+	}
+
+	public List<String> getAccountOrder() {
+		return accountOrder;
 	}
 }
