@@ -14,26 +14,35 @@ public class TransferCommandValidator {
 	}
 
 	boolean validate(String[] commandArguments) {
+		boolean isValid = true; // Start with assuming the command is valid
+
 		// Check if the expected number of arguments are provided to avoid
 		// ArrayIndexOutOfBoundsException.
 		if (commandArguments.length < 4) {
-			return false;
+			return false; // Immediate return here is necessary due to argument length check
 		}
 
-		if (doesAccountExist(commandArguments, bank, 1) && doesAccountExist(commandArguments, bank, 2)) {
-			if (commandArguments[1].equals(commandArguments[2])) {
-				return false;
-			}
+		// Both accounts must exist and not be the same, neither can be a CD account.
+		boolean bothAccountsExist = doesAccountExist(commandArguments, bank, 1)
+				&& doesAccountExist(commandArguments, bank, 2);
+		boolean accountsAreDifferent = !commandArguments[1].equals(commandArguments[2]);
+		boolean notCDAccount = !isReferencingCDAccount(commandArguments, bank, 1)
+				&& !isReferencingCDAccount(commandArguments, bank, 2);
 
-			if (isReferencingCDAccount(commandArguments, bank, 1)
-					|| isReferencingCDAccount(commandArguments, bank, 2)) {
-				return false;
-			}
+		if (!bothAccountsExist || !accountsAreDifferent || !notCDAccount) {
+			isValid = false; // Set isValid to false without returning immediately
+		} else {
+			// Only proceed with further checks if the initial conditions are met
+			boolean depositCriteriaValid = verifyDepositCriteriaForTransfer(commandArguments);
+			boolean withdrawalCriteriaValid = verifyWithdrawalCriteriaForTransfer(commandArguments);
 
-			return verifyDepositCriteriaForTransfer(commandArguments)
-					&& verifyWithdrawalCriteriaForTransfer(commandArguments);
+			// If either deposit or withdrawal criteria are not met, the command is invalid
+			if (!depositCriteriaValid || !withdrawalCriteriaValid) {
+				isValid = false; // Update isValid based on criteria checks
+			}
 		}
-		return false;
+
+		return isValid; // Return the result of the validations
 	}
 
 	private boolean verifyDepositCriteriaForTransfer(String[] commandArguments) {
