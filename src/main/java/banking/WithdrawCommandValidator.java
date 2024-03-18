@@ -11,23 +11,20 @@ class WithdrawCommandValidator {
 
 	boolean validate(String[] commandArguments) {
 		if (!doesAccountExist(commandArguments, bank, 1)) {
-			return false;
-		}
-
-		if (isReferencingCheckingAccount(commandArguments, bank)) {
-			return isCheckingWithdrawalAmountValid(commandArguments);
-		}
-
-		if (isReferencingSavingsAccount(commandArguments, bank)) {
+			return false; // Account must exist.
+		} else if (isReferencingCheckingAccount(commandArguments, bank)) {
+			return isCheckingWithdrawalAmountValid(commandArguments); // Validate checking account withdrawal.
+		} else if (isReferencingSavingsAccount(commandArguments, bank)) {
 			return isSavingsWithdrawalAmountValid(commandArguments)
-					&& canWithdrawFromSavingsThisMonth(commandArguments);
+					&& canWithdrawFromSavingsThisMonth(commandArguments); // Validate savings account withdrawal.
+		} else if (isReferencingCDAccount(commandArguments, bank, 1)) {
+			return isCDWithdrawalAmountValid(commandArguments) && isCDAccountMaturityReached(commandArguments); // Validate
+																												// CD
+																												// account
+																												// withdrawal.
 		}
 
-		if (isReferencingCDAccount(commandArguments, bank, 1)) {
-			return isCDWithdrawalAmountValid(commandArguments) && isCDAccountMaturityReached(commandArguments);
-		}
-
-		return false;
+		return false; // If none of the above, the operation is not valid.
 	}
 
 	private boolean isSavingsWithdrawalAmountValid(String[] commandArguments) {
