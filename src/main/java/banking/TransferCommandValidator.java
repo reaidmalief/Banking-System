@@ -10,10 +10,16 @@ public class TransferCommandValidator {
 
 	TransferCommandValidator(Bank bank) {
 		this.bank = bank;
-		validator = new CommandValidator(bank);
+		this.validator = new CommandValidator(bank);
 	}
 
 	boolean validate(String[] commandArguments) {
+		// Check if the expected number of arguments are provided to avoid
+		// ArrayIndexOutOfBoundsException.
+		if (commandArguments.length < 4) {
+			return false;
+		}
+
 		if (doesAccountExist(commandArguments, bank, 1) && doesAccountExist(commandArguments, bank, 2)) {
 			if (commandArguments[1].equals(commandArguments[2])) {
 				return false;
@@ -41,5 +47,4 @@ public class TransferCommandValidator {
 		String amountToTransfer = commandArguments[3];
 		return validator.validate(new String[] { "withdraw", accountIDToWithdrawFrom, amountToTransfer });
 	}
-
 }
