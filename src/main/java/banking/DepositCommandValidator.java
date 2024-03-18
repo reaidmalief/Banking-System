@@ -69,16 +69,16 @@ public class DepositCommandValidator {
 			return false;
 		}
 
-		if (isReferencingCheckingAccount(args, bankingSystem)) {
-			return depositAmountIntoCheckingAccountIsValid(args);
-		} else if (isReferencingSavingsAccount(args, bankingSystem)) {
-			return depositAmountIntoSavingsAccountIsValid(args);
-		} else if (isReferencingCDAccount(args, bankingSystem, 1)) {
+		boolean isValid = false;
 
-			return false;
+		if (isReferencingCheckingAccount(args, bankingSystem)) {
+			isValid = depositAmountIntoCheckingAccountIsValid(args);
+		} else if (isReferencingSavingsAccount(args, bankingSystem)) {
+			isValid = depositAmountIntoSavingsAccountIsValid(args);
 		}
 
-		return false;
+		return isValid;
+
 	}
 
 }
