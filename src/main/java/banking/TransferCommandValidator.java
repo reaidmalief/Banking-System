@@ -14,35 +14,27 @@ public class TransferCommandValidator {
 	}
 
 	boolean validate(String[] commandArguments) {
-		boolean isValid = true; // Start with assuming the command is valid
-
-		// Check if the expected number of arguments are provided to avoid
-		// ArrayIndexOutOfBoundsException.
+		// Early return if the number of arguments is less than expected.
 		if (commandArguments.length < 4) {
-			return false; // Immediate return here is necessary due to argument length check
+			return false;
 		}
 
-		// Both accounts must exist and not be the same, neither can be a CD account.
-		boolean bothAccountsExist = doesAccountExist(commandArguments, bank, 1)
-				&& doesAccountExist(commandArguments, bank, 2);
-		boolean accountsAreDifferent = !commandArguments[1].equals(commandArguments[2]);
-		boolean notCDAccount = !isReferencingCDAccount(commandArguments, bank, 1)
-				&& !isReferencingCDAccount(commandArguments, bank, 2);
-
-		if (!bothAccountsExist || !accountsAreDifferent || !notCDAccount) {
-			isValid = false; // Set isValid to false without returning immediately
-		} else {
-			// Only proceed with further checks if the initial conditions are met
-			boolean depositCriteriaValid = verifyDepositCriteriaForTransfer(commandArguments);
-			boolean withdrawalCriteriaValid = verifyWithdrawalCriteriaForTransfer(commandArguments);
-
-			// If either deposit or withdrawal criteria are not met, the command is invalid
-			if (!depositCriteriaValid || !withdrawalCriteriaValid) {
-				isValid = false; // Update isValid based on criteria checks
-			}
+		// Check if both accounts exist. If either doesn't, return false early.
+		if (!doesAccountExist(commandArguments, bank, 1) || !doesAccountExist(commandArguments, bank, 2)) {
+			return false;
 		}
 
-		return isValid; // Return the result of the validations
+		// Check if the accounts are the same or if either is a CD account, which is not
+		// allowed.
+		if (commandArguments[1].equals(commandArguments[2]) || isReferencingCDAccount(commandArguments, bank, 1)
+				|| isReferencingCDAccount(commandArguments, bank, 2)) {
+			return false;
+		}
+
+		// Finally, validate the transfer amount for both withdrawal and deposit
+		// criteria.
+		return verifyDepositCriteriaForTransfer(commandArguments)
+				&& verifyWithdrawalCriteriaForTransfer(commandArguments);
 	}
 
 	private boolean verifyDepositCriteriaForTransfer(String[] commandArguments) {
