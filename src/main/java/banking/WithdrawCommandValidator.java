@@ -10,16 +10,23 @@ class WithdrawCommandValidator {
 	}
 
 	boolean validate(String[] commandArguments) {
-		if (doesAccountExist(commandArguments, bank, 1)) {
-			if (isReferencingCheckingAccount(commandArguments, bank)) {
-				return isCheckingWithdrawalAmountValid(commandArguments);
-			} else if (isReferencingSavingsAccount(commandArguments, bank)) {
-				return isSavingsWithdrawalAmountValid(commandArguments)
-						&& canWithdrawFromSavingsThisMonth(commandArguments);
-			} else if (isReferencingCDAccount(commandArguments, bank, 1)) {
-				return isCDWithdrawalAmountValid(commandArguments) && isCDAccountMaturityReached(commandArguments);
-			}
+		if (!doesAccountExist(commandArguments, bank, 1)) {
+			return false;
 		}
+
+		if (isReferencingCheckingAccount(commandArguments, bank)) {
+			return isCheckingWithdrawalAmountValid(commandArguments);
+		}
+
+		if (isReferencingSavingsAccount(commandArguments, bank)) {
+			return isSavingsWithdrawalAmountValid(commandArguments)
+					&& canWithdrawFromSavingsThisMonth(commandArguments);
+		}
+
+		if (isReferencingCDAccount(commandArguments, bank, 1)) {
+			return isCDWithdrawalAmountValid(commandArguments) && isCDAccountMaturityReached(commandArguments);
+		}
+
 		return false;
 	}
 
