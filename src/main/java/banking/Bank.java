@@ -10,6 +10,15 @@ public class Bank {
 	private final HashMap<String, Account> accounts = new HashMap<>();
 
 	public Bank() {
+		// Initialize the state of the Bank object here. This may involve setting up
+		// default values,
+		// initializing collections, or performing any startup logic required for the
+		// Bank instance
+		// to function properly. Completing the constructor's implementation is
+		// necessary when
+		// the object needs to maintain a specific state right from the moment it is
+		// created.
+
 	}
 
 	HashMap<String, Account> getAccounts() {
