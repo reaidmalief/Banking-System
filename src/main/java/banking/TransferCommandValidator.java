@@ -14,38 +14,28 @@ public class TransferCommandValidator {
 	}
 
 	boolean validate(String[] commandArguments) {
-		// Early return if the number of arguments is less than expected.
-		if (commandArguments.length < 4) {
-			return false;
-		}
-
-		// Check if both accounts exist. If either doesn't, return false early.
-		if (!doesAccountExist(commandArguments, bank, 1) || !doesAccountExist(commandArguments, bank, 2)) {
-			return false;
-		}
-
-		// Check if the accounts are the same or if either is a CD account, which is not
-		// allowed.
-		if (commandArguments[1].equals(commandArguments[2]) || isReferencingCDAccount(commandArguments, bank, 1)
-				|| isReferencingCDAccount(commandArguments, bank, 2)) {
-			return false;
-		}
-
-		// Finally, validate the transfer amount for both withdrawal and deposit
-		// criteria.
-		return verifyDepositCriteriaForTransfer(commandArguments)
+		// Ensuring the validation logic is straightforward and avoids deep nesting:
+		// 1. Checks if the required number of arguments are provided.
+		// 2. Verifies both accounts exist.
+		// 3. Ensures the accounts are not the same.
+		// 4. Checks neither account is a CD account, which cannot participate in
+		// transfers.
+		// 5. Validates both deposit and withdrawal criteria for a transfer.
+		return commandArguments.length >= 4 && doesAccountExist(commandArguments, bank, 1)
+				&& doesAccountExist(commandArguments, bank, 2) && !commandArguments[1].equals(commandArguments[2])
+				&& !isReferencingCDAccount(commandArguments, bank, 1)
+				&& !isReferencingCDAccount(commandArguments, bank, 2)
+				&& verifyDepositCriteriaForTransfer(commandArguments)
 				&& verifyWithdrawalCriteriaForTransfer(commandArguments);
 	}
 
 	private boolean verifyDepositCriteriaForTransfer(String[] commandArguments) {
-		String accountIDToDepositTo = commandArguments[2];
-		String amountToTransfer = commandArguments[3];
-		return validator.validate(new String[] { "deposit", accountIDToDepositTo, amountToTransfer });
+		// this method validates the deposit part of the transfer.
+		return validator.validate(new String[] { "deposit", commandArguments[2], commandArguments[3] });
 	}
 
 	private boolean verifyWithdrawalCriteriaForTransfer(String[] commandArguments) {
-		String accountIDToWithdrawFrom = commandArguments[1];
-		String amountToTransfer = commandArguments[3];
-		return validator.validate(new String[] { "withdraw", accountIDToWithdrawFrom, amountToTransfer });
+		// this method validates the withdrawal part of the transfer.
+		return validator.validate(new String[] { "withdraw", commandArguments[1], commandArguments[3] });
 	}
 }
